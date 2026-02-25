@@ -43,56 +43,43 @@ Topics you master:
 
 Always end responses with a small cosmic gem — a beautiful astronomy fact or poetic observation about the universe.`;
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+exports.handler = async function(event, context) {
+  // التحقق من نوع الطلب
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
-  const { messages, language } = req.body;
+  try {
+    const { messages } = JSON.parse(event.body);
 
-  if (!messages || !Array.isArray(messages)) {
-    return res.status(400).json({ error: 'Invalid messages format' });
-  }
+    if (GROQ_KEYS.length === 0) {
+      return { statusCode: 500, body: JSON.stringify({ error: 'No API keys configured' }) };
+    }
 
-  if (GROQ_KEYS.length === 0) {
-    return res.status(500).json({ error: 'No API keys configured' });
-  }
-
-  let lastError;
-  // Try each key in rotation (up to 3 attempts)
-  for (let attempt = 0; attempt < Math.min(3, GROQ_KEYS.length); attempt++) {
     const apiKey = getNextKey();
     const groq = new Groq({ apiKey });
 
-    try {
-      const completion = await groq.chat.completions.create({
-        model: 'llama3-70b-8192',
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          ...messages.slice(-10), // Keep last 10 messages for context
-        ],
-        temperature: 0.8,
-        max_tokens: 1024,
-        stream: false,
-      });
+    const completion = await groq.chat.completions.create({
+      model: 'llama3-70b-8192',
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        ...messages.slice(-10),
+      ],
+      temperature: 0.8,
+      max_tokens: 1024,
+    });
 
-      const reply = completion.choices[0]?.message?.content || 'The cosmos whispers, but I cannot hear it right now. Please try again.';
-
-      return res.status(200).json({
-        reply,
-        model: completion.model,
-        usage: completion.usage,
-      });
-    } catch (error) {
-      lastError = error;
-      console.error(`Groq key attempt ${attempt + 1} failed:`, error.message);
-      // Continue to next key
-    }
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        reply: completion.choices[0]?.message?.content,
+      }),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Cosmic connection disrupted', details: error.message }),
+    };
   }
-
-  console.error('All Groq keys failed:', lastError);
-  return res.status(500).json({
-    error: 'The cosmic connection is temporarily disrupted. Please try again.',
-    details: lastError?.message,
-  });
-}
+};
