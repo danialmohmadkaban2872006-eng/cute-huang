@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cairo:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cosmic-bg: #0B0B19;
+  --cosmic-purple: #1A0A2E;
+  --cosmic-violet: #2D1B69;
+  --cosmic-rose: #E7C1B1;
+  --cosmic-neon: #B980FF;
+  --cosmic-stardust: #F5F0FF;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--cosmic-bg);
+  color: var(--cosmic-stardust);
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+body[dir="rtl"] {
+  font-family: 'Cairo', 'Inter', system-ui, sans-serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--cosmic-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cosmic-violet);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cosmic-neon);
+}
+
+/* Neon glow utilities */
+.neon-text {
+  text-shadow: 0 0 10px #B980FF, 0 0 20px #B980FF, 0 0 40px #B980FF;
+}
+
+.neon-rose {
+  text-shadow: 0 0 10px #E7C1B1, 0 0 20px #E7C1B1;
+}
+
+.neon-border {
+  box-shadow: 0 0 10px #B980FF, 0 0 20px #B980FF, inset 0 0 10px rgba(185, 128, 255, 0.1);
+}
+
+.glass {
+  background: rgba(26, 10, 46, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(185, 128, 255, 0.2);
+}
+
+.glass-rose {
+  background: rgba(231, 193, 177, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(231, 193, 177, 0.2);
+}
+
+/* Stars background */
+.stars-bg {
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 90px 40px, #fff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 230px 180px, #fff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 280px 90px, #eee, rgba(0,0,0,0));
+  background-size: 300px 200px;
+}
+
+/* Section transitions */
+.section-fade {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.section-fade.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Code highlighting */
+.code-cpp { color: #B980FF; }
+.code-python { color: #4FC3F7; }
+.code-fortran { color: #A5D6A7; }
+.code-comment { color: #78909C; }
+.code-string { color: #E7C1B1; }
+.code-number { color: #FFD700; }
+
+/* Footer neon glow */
+.footer-glow {
+  text-shadow: 0 0 10px #B980FF, 0 0 20px #B980FF, 0 0 40px #6B21A8;
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { text-shadow: 0 0 10px #B980FF, 0 0 20px #B980FF, 0 0 40px #6B21A8; }
+  50% { text-shadow: 0 0 20px #B980FF, 0 0 40px #B980FF, 0 0 80px #6B21A8, 0 0 120px #6B21A8; }
+}
+
+/* Chat bubbles */
+.chat-bubble-user {
+  background: linear-gradient(135deg, #2D1B69, #1A0A2E);
+  border: 1px solid rgba(185, 128, 255, 0.3);
+}
+
+.chat-bubble-ai {
+  background: linear-gradient(135deg, rgba(231, 193, 177, 0.1), rgba(107, 33, 168, 0.2));
+  border: 1px solid rgba(231, 193, 177, 0.2);
+}
+
+/* Orbital animation */
+.planet-orbit {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(185, 128, 255, 0.15);
+  animation: orbitSpin linear infinite;
+  transform-origin: center;
+}
+
+@keyframes orbitSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Moon phase glow */
+.moon-glow {
+  box-shadow: 0 0 20px rgba(231, 193, 177, 0.4), 0 0 40px rgba(231, 193, 177, 0.2);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #E7C1B1, #B980FF, #F5F0FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Constellation lines */
+.constellation-line {
+  stroke: rgba(185, 128, 255, 0.4);
+  stroke-width: 1;
+  fill: none;
+}
+
+/* Black hole animation */
+@keyframes blackHoleSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.accretion-disk {
+  animation: blackHoleSpin 8s linear infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .neon-text {
+    text-shadow: 0 0 5px #B980FF, 0 0 10px #B980FF;
+  }
+}
